@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 // LongLexTo: Tokenizing Thai texts using Longest Matching Approach
 //   Note: Types: 0=unknown  1=known  2=ambiguous  3=English/digits  4=special characters
 //
@@ -52,7 +52,7 @@ public class LongLexTo {
   /*******************************************************************/
   public Vector getTypeList() {
     return typeList; }
-    
+
   /*******************************************************************/
   /******************** Iterator for index list **********************/
   /*******************************************************************/
@@ -62,22 +62,22 @@ public class LongLexTo {
       return false;
     return true;
   }
-  
+
   //Return iterator's first index
   public int first() {
     return 0;
   }
-  
+
   //Return iterator's next index
   public int next() {
     return((Integer)iter.next()).intValue();
   }
-  
+
   /*******************************************************************/
   /********************** Constructor (default) **********************/
   /*******************************************************************/
   public LongLexTo() throws IOException {
-    
+
     dict=new Trie();
     File dictFile=new File("lexitron.txt");
     if(dictFile.exists())
@@ -89,7 +89,7 @@ public class LongLexTo {
     typeList=new Vector();
     ptree=new LongParseTree(dict, indexList, typeList);
   } //Constructor
-    
+
   /*******************************************************************/
   /************** Constructor (passing dictionary file ) *************/
   /*******************************************************************/
@@ -105,32 +105,32 @@ public class LongLexTo {
     typeList=new Vector();
     ptree=new LongParseTree(dict, indexList, typeList);
   } //Constructor
-  
+
   /*******************************************************************/
   /**************************** addDict ******************************/
   /*******************************************************************/
   public void addDict(File dictFile) throws IOException {
-   
+
     //Read words from dictionary
     String line, word, word2;
     int index;
     FileReader fr = new FileReader(dictFile);
     BufferedReader br = new BufferedReader(fr);
-    
+
     while((line=br.readLine())!=null) {
       line=line.trim();
       if(line.length()>0)
         dict.add(line);
     }
   } //addDict
-  
+
   /****************************************************************/
   /************************** wordInstance ************************/
   /****************************************************************/
   public void wordInstance(String text) {
 
     indexList.clear();
-    typeList.clear();    
+    typeList.clear();
     int pos, index;
     String word;
     boolean found;
@@ -172,7 +172,7 @@ public class LongLexTo {
     } //While all text length
     iter=indexList.iterator();
   } //wordInstance
-        
+
   /****************************************************************/
   /************************** lineInstance ************************/
   /****************************************************************/
@@ -188,45 +188,45 @@ public class LongLexTo {
       curIndex=((Integer)indexList.elementAt(i)).intValue();
 
       if((curType==3)||(curType==4)) {
-    	//Parenthesese
-    	if((curType==4)&&(text.charAt(curIndex-1)=='(')) {
+        //Parenthesese
+        if((curType==4)&&(text.charAt(curIndex-1)=='(')) {
           int pos=i+1;
           while((pos<typeList.size())&&(pos<i+windowSize)) {
-	    tempType=((Integer)typeList.elementAt(pos)).intValue();
-    	    tempIndex=((Integer)indexList.elementAt(pos++)).intValue();  
- 	    if((tempType==4)&&(text.charAt(tempIndex-1)==')')) {
-    	      lineList.addElement(new Integer(tempIndex));
-    	      i=pos-1;
+            tempType=((Integer)typeList.elementAt(pos)).intValue();
+            tempIndex=((Integer)indexList.elementAt(pos++)).intValue();
+            if((tempType==4)&&(text.charAt(tempIndex-1)==')')) {
+              lineList.addElement(new Integer(tempIndex));
+              i=pos-1;
               break;
-    	    }
-    	  }
-        }    	  
+            }
+          }
+        }
         //Single quote
-    	else if((curType==4)&&(text.charAt(curIndex-1)=='\'')) {
+        else if((curType==4)&&(text.charAt(curIndex-1)=='\'')) {
           int pos=i+1;
           while((pos<typeList.size())&&(pos<i+windowSize)) {
-	    tempType=((Integer)typeList.elementAt(pos)).intValue();
-    	    tempIndex=((Integer)indexList.elementAt(pos++)).intValue();  
- 	    if((tempType==4)&&(text.charAt(tempIndex-1)=='\'')) {
-    	      lineList.addElement(new Integer(tempIndex));
-    	      i=pos-1;
+            tempType=((Integer)typeList.elementAt(pos)).intValue();
+            tempIndex=((Integer)indexList.elementAt(pos++)).intValue();
+            if((tempType==4)&&(text.charAt(tempIndex-1)=='\'')) {
+              lineList.addElement(new Integer(tempIndex));
+              i=pos-1;
               break;
-    	    }
-    	  } 	    
-    	}
-    	//Double quote
-    	else if((curType==4)&&(text.charAt(curIndex-1)=='\"')) {
+            }
+          }
+        }
+        //Double quote
+        else if((curType==4)&&(text.charAt(curIndex-1)=='\"')) {
           int pos=i+1;
           while((pos<typeList.size())&&(pos<i+windowSize)) {
-	    tempType=((Integer)typeList.elementAt(pos)).intValue();
-    	    tempIndex=((Integer)indexList.elementAt(pos++)).intValue();  
- 	    if((tempType==4)&&(text.charAt(tempIndex-1)=='\"')) {
-    	      lineList.addElement(new Integer(tempIndex));
-    	      i=pos-1;
+            tempType=((Integer)typeList.elementAt(pos)).intValue();
+            tempIndex=((Integer)indexList.elementAt(pos++)).intValue();
+            if((tempType==4)&&(text.charAt(tempIndex-1)=='\"')) {
+              lineList.addElement(new Integer(tempIndex));
+              i=pos-1;
               break;
-    	    }
-    	  } 	    
-    	}    	  
+            }
+          }
+        }
         else
           lineList.addElement(new Integer(curIndex));
       }
@@ -234,8 +234,8 @@ public class LongLexTo {
         nextType=((Integer)typeList.elementAt(i+1)).intValue();
         nextIndex=((Integer)indexList.elementAt(i+1)).intValue();
         if((nextType==3)||
-          ((nextType==4)&&((text.charAt(nextIndex-1)==' ')||(text.charAt(nextIndex-1)=='\"')||
-                           (text.charAt(nextIndex-1)=='(')||(text.charAt(nextIndex-1)=='\''))))
+                ((nextType==4)&&((text.charAt(nextIndex-1)==' ')||(text.charAt(nextIndex-1)=='\"')||
+                        (text.charAt(nextIndex-1)=='(')||(text.charAt(nextIndex-1)=='\''))))
           lineList.addElement(new Integer(((Integer)indexList.elementAt(i)).intValue()));
         else if((curType==1)&&(nextType!=0)&&(nextType!=4))
           lineList.addElement(new Integer(((Integer)indexList.elementAt(i)).intValue()));
@@ -243,14 +243,14 @@ public class LongLexTo {
     }
     if(i<typeList.size())
       lineList.addElement(new Integer(((Integer)indexList.elementAt(indexList.size()-1)).intValue()));
-    iter=lineList.iterator(); 
+    iter=lineList.iterator();
   } //lineInstance
-  
+
   /****************************************************************/
   /*************************** Demo *******************************/
   /****************************************************************/
   public static void main(String[] args) throws IOException {
-     
+
     LongLexTo tokenizer=new LongLexTo(new File("lexitron.txt"));
     File unknownFile=new File("unknown.txt");
     if(unknownFile.exists())
@@ -258,44 +258,44 @@ public class LongLexTo {
     Vector typeList;
     String text="", line, inFileName, outFileName;
     char ch;
-    int begin, end, type; 
- 
+    int begin, end, type;
+
     File inFile, outFile;
     FileReader fr;
     BufferedReader br;
     FileWriter fw;
- 
-    BufferedReader streamReader = new BufferedReader(new InputStreamReader(System.in)); 
-    
+
+    BufferedReader streamReader = new BufferedReader(new InputStreamReader(System.in));
+
     System.out.println("\n\n*******************************");
     System.out.println("*** LexTo: Lexeme Tokenizer ***");
     System.out.println("*******************************");
-    do {      
+    do {
       //Get input file name
       do {
-      	System.out.print("\n >>> Enter input file ('q' to quit): ");
+        System.out.print("\n >>> Enter input file ('q' to quit): ");
         inFileName=(streamReader.readLine()).trim();
         if(inFileName.equals("q"))
           System.exit(1);
         inFile=new File(System.getProperty("user.dir") + "//" + inFileName);
       } while(!inFile.exists());
-      
+
       //Get output file name
       System.out.print(" >>> Enter output file (.html only): ");
       outFileName=(streamReader.readLine()).trim();
       outFile=new File(System.getProperty("user.dir") + "//" + outFileName);
-      
+
       fr=new FileReader(inFile);
       br=new BufferedReader(fr);
-      fw=new FileWriter(outFile);  
+      fw=new FileWriter(outFile);
 
       while((line=br.readLine())!=null) {
         line=line.trim();
         if(line.length()>0) {
-   
+
           fw.write("<b>Text:</b> " + line);
           fw.write("<br>\n");
-    
+
           fw.write("<b>Word instance:</b> ");
           tokenizer.wordInstance(line);
           typeList=tokenizer.getTypeList();
@@ -318,16 +318,16 @@ public class LongLexTo {
             begin=end;
           }
           fw.write("<br>\n");
-          
+
           fw.write("<b>Line instance:</b> ");
-          tokenizer.lineInstance(line);    
+          tokenizer.lineInstance(line);
           begin=tokenizer.first();
           while(tokenizer.hasNext()) {
             end=tokenizer.next();
             fw.write(line.substring(begin, end) + "<font color=#ff0000>|</font>");
             begin=end;
           }
-          fw.write("<br><br>\n");        
+          fw.write("<br><br>\n");
         }
       } //while all line
       fw.write("<hr>");
