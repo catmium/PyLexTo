@@ -15,11 +15,11 @@
 // LongLexTo: Tokenizing Thai texts using Longest Matching Approach
 //   Note: Types: 0=unknown  1=known  2=ambiguous  3=English/digits  4=special characters
 //
-// Public methods: 
+// Public methods:
 //   1) public LongLexTo(File dictFile);	//Constructor with a dictionary file
 //   2) public void addDict(File dictFile);     //Add dictionary (e.g., unknown-word file)
 //   3) public void wordInstance(String text);  //Word tokenization
-//   4) public void lineInstance(String text);  //Line-break tokenization 
+//   4) public void lineInstance(String text);  //Line-break tokenization
 //   4) public Vector getIndexList();
 //   5) Iterator's public methods: hasNext, first, next
 //
@@ -56,7 +56,7 @@ public class LongLexTo {
   /*******************************************************************/
   /******************** Iterator for index list **********************/
   /*******************************************************************/
-  //Return iterator's hasNext for index list 
+  //Return iterator's hasNext for index list
   public boolean hasNext() {
     if(!iter.hasNext())
       return false;
@@ -100,6 +100,26 @@ public class LongLexTo {
       addDict(dictFile);
     else
       System.out.println(" !!! Error: The dictionary file is not found, " + dictFile.getName());
+    indexList=new Vector();
+    lineList=new Vector();
+    typeList=new Vector();
+    ptree=new LongParseTree(dict, indexList, typeList);
+  } //Constructor
+
+  /*******************************************************************/
+  /************ Constructor (passing dictionary dir name ) ***********/
+  /*******************************************************************/
+  public LongLexTo(String dictDir) throws IOException {
+
+    dict=new Trie();
+    File dir = new File(dictDir);
+    File[] files = dir.listFiles();
+    for (File dictFile : files) {
+      if (dictFile.exists())
+        addDict(dictFile);
+      else
+        System.out.println(" !!! Error: The dictionary file is not found, " + dictFile.getName());
+    }
     indexList=new Vector();
     lineList=new Vector();
     typeList=new Vector();
@@ -249,7 +269,7 @@ public class LongLexTo {
   /****************************************************************/
   /*************************** Demo *******************************/
   /****************************************************************/
-  public static void main(String[] args) throws IOException {
+  /*public static void main(String[] args) throws IOException {
 
     LongLexTo tokenizer=new LongLexTo(new File("lexitron.txt"));
     File unknownFile=new File("unknown.txt");
@@ -273,7 +293,7 @@ public class LongLexTo {
     do {
       //Get input file name
       do {
-        System.out.print("\n >>> Enter input file ('q' to quit): ");
+      	System.out.print("\n >>> Enter input file ('q' to quit): ");
         inFileName=(streamReader.readLine()).trim();
         if(inFileName.equals("q"))
           System.exit(1);
@@ -340,5 +360,5 @@ public class LongLexTo {
       fw.close();
       System.out.println("\n *** Status: Use Web browser to view result: " + outFileName);
     } while(true);
-  } //main
+  } */ //main
 }
