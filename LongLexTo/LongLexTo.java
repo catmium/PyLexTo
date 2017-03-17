@@ -107,9 +107,9 @@ public class LongLexTo {
   } //Constructor
 
   /*******************************************************************/
-  /************ Constructor (passing dictionary dir name ) ***********/
+  /******* Constructor (passing dictionary dir name & word list) *****/
   /*******************************************************************/
-  public LongLexTo(String dictDir) throws IOException {
+  public LongLexTo(String dictDir, String[] wordList) throws IOException {
 
     dict=new Trie();
     File dir = new File(dictDir);
@@ -120,6 +120,10 @@ public class LongLexTo {
       else
         System.out.println(" !!! Error: The dictionary file is not found, " + dictFile.getName());
     }
+    if (wordList != null)
+      for (String w : wordList) {
+        dict.add(w);
+      }
     indexList=new Vector();
     lineList=new Vector();
     typeList=new Vector();
