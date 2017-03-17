@@ -6,11 +6,11 @@ from os import path
 
 
 class LexTo(object):
-    def __init__(self):
+    def __init__(self, word_list=None):
         file_path = path.abspath(path.dirname(__file__))
         jpype.startJVM(jpype.getDefaultJVMPath(), '-ea', '-Djava.class.path={0}/LongLexTo'.format(file_path))
         LongLexTo = jpype.JClass('LongLexTo')
-        self.tokenizer = LongLexTo('./data/dictionary')
+        self.tokenizer = LongLexTo('./data/dictionary', word_list)
         self.type_string = {0: "unknown",
                             1: "known",
                             2: "ambiguous",
@@ -19,6 +19,7 @@ class LexTo(object):
 
     def tokenize(self, line):
         line = line.strip()
+        line = line.replace(u'ํา', u'ำ')
         self.tokenizer.wordInstance(line)
         type_list = self.tokenizer.getTypeList()
         type_list = [self.type_string[n.value] for n in type_list]
