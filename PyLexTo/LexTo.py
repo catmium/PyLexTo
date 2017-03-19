@@ -8,7 +8,6 @@ from os import path
 class LexTo(object):
     def __init__(self, word_list=None):
         file_path = path.abspath(path.dirname(__file__))
-        print(file_path)
         jpype.startJVM(jpype.getDefaultJVMPath(), '-ea', '-Djava.class.path={0}/LongLexTo'.format(file_path))
         LongLexTo = jpype.JClass('LongLexTo')
         self.tokenizer = LongLexTo(file_path + '/data/dictionary', word_list)
