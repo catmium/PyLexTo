@@ -12,5 +12,5 @@ setup(
     license='GPL-3.0',
     author_email='hello@jets.im',
     package_data={'': ['LICENSE'],
-                  'PyLexTo': ['LongLexTo', 'data/dictionary/*.txt', 'data/stopwords/*.txt']}
+                  'PyLexTo': ['LongLexTo/*.class', 'data/dictionary/*.txt', 'data/stopwords/*.txt']}
 )
