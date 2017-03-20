@@ -2,22 +2,29 @@
 # -*- coding: utf-8 -*-
 
 import jpype
-from os import path
+from os import path, walk
 
 
 class LexTo(object):
     def __init__(self, word_list=None):
-        file_path = path.abspath(path.dirname(__file__))
-        jpype.startJVM(jpype.getDefaultJVMPath(), '-ea', '-Djava.class.path={0}/LongLexTo'.format(file_path))
+        dir_path = path.abspath(path.dirname(__file__))
+        jpype.startJVM(jpype.getDefaultJVMPath(), '-ea', '-Djava.class.path={0}/LongLexTo'.format(dir_path))
         LongLexTo = jpype.JClass('LongLexTo')
-        self.tokenizer = LongLexTo(file_path + '/data/dictionary', word_list)
+        self.tokenizer = LongLexTo(dir_path + '/data/dictionary', word_list)
+        self.stopwords = []
+        for root, dirs, files in walk(dir_path + '/data/stopwords'):
+            for file in files:
+                if file.endswith('stopwords.txt'):
+                    with open(path.join(root, file)) as f:
+                        for w in f.readlines():
+                            self.stopwords.append(w.strip())
         self.type_string = {0: "unknown",
                             1: "known",
                             2: "ambiguous",
                             3: "English/Digits",
                             4: "special"}
 
-    def tokenize(self, line):
+    def tokenize(self, line, remove_stopwords=False, remove_space=False):
         line = line.strip()
         line = line.replace(u'ํา', u'ำ')
         self.tokenizer.wordInstance(line)
@@ -29,4 +36,14 @@ class LexTo(object):
             end = self.tokenizer.next()
             word_list.append(line[begin:end])
             begin = end
+        if remove_stopwords:
+            for i, w in enumerate(word_list):
+                if w in self.stopwords:
+                    del word_list[i]
+                    del type_list[i]
+        if remove_space:
+            for i, w in enumerate(word_list):
+                if len(w.strip()) == 0:
+                    del word_list[i]
+                    del type_list[i]
         return word_list, type_list
