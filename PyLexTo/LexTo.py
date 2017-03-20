@@ -36,14 +36,18 @@ class LexTo(object):
             end = self.tokenizer.next()
             word_list.append(line[begin:end])
             begin = end
+        idx2brm = []
         if remove_stopwords:
             for i, w in enumerate(word_list):
                 if w in self.stopwords:
-                    del word_list[i]
-                    del type_list[i]
+                    idx2brm.append(i)
+            word_list = [w for i, w in enumerate(word_list) if i not in idx2brm]
+            type_list = [w for i, w in enumerate(type_list) if i not in idx2brm]
+        idx2brm = []
         if remove_space:
             for i, w in enumerate(word_list):
                 if len(w.strip()) == 0:
-                    del word_list[i]
-                    del type_list[i]
+                    idx2brm.append(i)
+            word_list = [w for i, w in enumerate(word_list) if i not in idx2brm]
+            type_list = [w for i, w in enumerate(type_list) if i not in idx2brm]
         return word_list, type_list
